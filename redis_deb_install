@@ -1,0 +1,75 @@
+#!/bin/bash
+REDIS_VERSION=2.4.15
+REDIS_URL=http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
+
+#PREFIX=/usr/local
+PREFIX=/opt/rhoconnect
+mkdir -p "${PREFIX}/logs/"
+mkdir -p "${PREFIX}/etc/"
+
+TIMESTAMP=`date +%Y%m%d%H%M%S`
+log_name=rhoconnect_redis_$(date +$TIMESTAMP).log
+log_file="${PREFIX}/logs/${log_name}"
+touch $log_file > /dev/null
+echo "Starting rhoconnect-redis installer ..." | tee -a $log_file
+
+cd /opt/rhoconnect/installer
+wget ${REDIS_URL} -O redis-${REDIS_VERSION}.tar.gz
+tar -xzf redis-${REDIS_VERSION}.tar.gz 
+cd redis-${REDIS_VERSION}/
+
+echo "Compiling redis ..." | tee -a $log_file
+make >> $log_file 2>&1
+make PREFIX=${PREFIX} install >> $log_file 2>&1
+if [[ $? != 0 ]]; then
+  echo "Installation of redis server failed. For troubleshooting see file $log_file ..." | tee -a $log_file
+  exit -1
+fi
+
+# redis.conf
+# daemonize no   --> daemonize yes
+# logfile stdout --> logfile /var/log/redis/redis.log
+# dir ./ -> --> dir /var/lib/redis/
+sed -i.bak 's/^daemonize no$/daemonize yes/' redis.conf
+sed -i.bak 's:^logfile stdout$:logfile /var/log/redis/redis.log:' redis.conf
+sed -i.bak 's:^dir ./$:dir /var/lib/redis/:' redis.conf
+cp redis.conf ${PREFIX}/etc/
+
+# Back to install directory
+cd ../
+
+# redis logrotate
+cp logrotate.conf /etc/logrotate.d/redis
+# Upstart script
+cp rhoconnect-redis.conf /etc/init/.
+
+USER="redis"
+HOME="/var/lib/redis"
+# Creating group if it isn't already there
+if ! getent group $USER >/dev/null
+then
+	addgroup --system $USER >/dev/null
+fi
+# Creating user if it isn't already there
+if ! getent passwd $USER >/dev/null
+then
+        adduser \
+          --system \
+          --disabled-login \
+          --ingroup $USER \
+          --home $HOME \
+          --gecos "redis server" \
+          --shell /bin/false \
+          $USER  >/dev/null
+fi
+mkdir -p /var/log/redis
+chown $USER:$USER /var/log/redis
+
+# Clean up ...
+rm redis-${REDIS_VERSION}.tar.gz
+rm -rf redis-${REDIS_VERSION}/
+rm -rf /opt/rhoconnect/installer
+
+echo "Redis server is successfully installed"  | tee -a $log_file
+echo "You can start a redis server using the following command:" | tee -a $log_file
+echo "  sudo start rhoconnect-redis" | tee -a $log_file

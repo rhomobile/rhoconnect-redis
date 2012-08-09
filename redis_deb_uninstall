@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ -e "/opt/rhoconnect/bin/" ]; then
+	cd /opt/rhoconnect/bin/
+	rm -f redis-server redis-benchmark redis-cli
+	rm -f redis-check-dump redis-check-aof
+fi
+
+rm -f /opt/rhoconnect/etc/redis.conf
+
+rm -f /etc/logrotate.d/redis
+rm -f /etc/init/rhoconect-redis.conf
+rm -f /etc/init.d/redis
+
+# delete user/group
+rm -rf /var/lib/redis
+deluser redis > /dev/null
