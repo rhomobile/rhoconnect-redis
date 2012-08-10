@@ -1,0 +1,66 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          redis-server
+# Required-Start:    $remote_fs $network
+# Required-Stop:     $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts redis-server
+# Description:       starts the redis server daemons
+### END INIT INFO
+
+prefix="/opt/rhoconnect"
+EXEC="${prefix}/bin/redis-server"
+CLI="${prefix}/bin/redis-cli"
+CONF="${prefix}/etc"
+REDISUSER="redis"
+
+case "$1" in
+	start)
+		mkdir -p /var/run/redis
+		chown redis:redis /var/run/redis
+		file="$CONF/redis.conf"
+		PIDFILE=`cat $file | grep pidfile | sed 's/pidfile //'`
+		PORT=`cat $file  | grep "^port" | sed 's/port //'`
+		if [ ! -n $PIDFILE ] || [ ! -n $PORT ]; then
+			echo "$file doesn't have a pid file and/or port, skipping.."
+		elif [ -f $PIDFILE ];  then
+        	echo "$PIDFILE exists, process is already running or crashed\n"
+		else
+			echo "Starting Redis server using $file...\n"
+			start-stop-daemon --start --pidfile $PIDFILE --umask 007 --chuid redis:redis --exec $EXEC -- $file
+		fi
+		;;
+    stop)
+		file="$CONF/redis.conf"
+		PIDFILE=`cat $file | grep pidfile | sed 's/pidfile //'`
+		PORT=`cat $file  | grep ^port | sed 's/port //'`
+		if [ -z "$PIDFILE" ] || [ -z  "$PORT" ]; then
+			echo "$file doesn't have a pid file and/or port, skipping.."
+		elif [ ! -f $PIDFILE ]; then
+        	echo "$PIDFILE does not exist, process is not running\n"
+		else
+            echo "Stopping $file...\n"
+			echo -n "SHUTDOWN" | $CLI -p $PORT
+			i=0
+            while [ -f $PIDFILE ] && [ $i -lt 10 ]
+            do
+            	echo "Waiting for Redis to shutdown ..."
+                sleep 1
+				i=$(($i+1))
+            done
+			if [ -f $PIDFILE ]; then
+				echo "pid file $PIDFILE still exists, something went wrong!"
+			fi
+            echo "Redis stopped"
+		fi
+		;;
+	restart|force-reload|reload)
+		$0 stop
+		$0 start
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|force-reload|reload}"
+	    exit 2	
+esac

@@ -1,6 +1,6 @@
 NAME=rhoconnect-redis
 VERSION=2.4.15
-DEB_FILES = redis_deb_install redis_deb_uninstall rhoconnect-redis.conf logrotate.conf
+DEB_FILES = redis_deb_install redis_deb_uninstall rhoconnect-redis.conf redis_deb_init_script logrotate.conf
 RPM_FILES = redis_rpm_install redis_rpm_uninstall redis_init_script logrotate.conf 
 
 clean:
@@ -9,7 +9,6 @@ clean:
 
 prepare:
 	mkdir -p /tmp/installdir
-	#cp $(FILES) /tmp/installdir
 
 deb: prepare
 	cp $(DEB_FILES) /tmp/installdir
@@ -28,7 +27,9 @@ rpm: prepare
 	--after-remove  /tmp/installdir/redis_rpm_uninstall \
 	--prefix /opt/rhoconnect/installer \
 	--description "RhoConnect Redis Server" \
-	--category "Development Tools"  ./
+	-d "make >= 3.0" -d "kernel-devel >= 0" -d "initscripts >= 0" \
+	-d "gcc >= 4.0" -d "gcc-c++ >= 4.0"  ./
+#	--category "Development Tools"  ./
 	rm -rf /tmp/installdir
 
 # Build both rpm/deb packagees
@@ -47,5 +48,8 @@ all: prepare
 	--after-remove  /tmp/installdir/redis_rpm_uninstall \
 	--prefix /opt/rhoconnect/installer \
 	--description "RhoConnect Redis Server" \
-	--category "Development Tools"  ./
+	-d "make >= 3.0" -d "kernel-devel >= 0"  -d "initscripts >= 0" \
+	-d "gcc >= 4.0" -d "gcc-c++ >= 4.0"  ./
+#	--category "Development Tools"  ./
+	./
 	rm -rf /tmp/installdir

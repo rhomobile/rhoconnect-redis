@@ -28,9 +28,11 @@ fi
 
 # redis.conf
 # daemonize no   --> daemonize yes
+# pidfile /var/run/redis.pid --> pidfile /var/run/redis/redis.pid
 # logfile stdout --> logfile /var/log/redis/redis.log
 # dir ./ -> --> dir /var/lib/redis/
 sed -i.bak 's/^daemonize no$/daemonize yes/' redis.conf
+sed -i.bak 's:/var/run/redis.pid:/var/run/redis/redis.pid:' redis.conf
 sed -i.bak 's:^logfile stdout$:logfile /var/log/redis/redis.log:' redis.conf
 sed -i.bak 's:^dir ./$:dir /var/lib/redis/:' redis.conf
 cp redis.conf ${PREFIX}/etc/

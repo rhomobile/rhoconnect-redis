@@ -22,8 +22,7 @@ prefix="/opt/rhoconnect"
 redis="${prefix}/bin/redis-server"
 prog=$(basename $redis)
 REDIS_CONF_FILE="${prefix}/etc/redis.conf"
-PIDFILE="/var/run/redis.pid"
-REDIS_USER="redis"
+PIDFILE="/var/run/redis/redis.pid"
 
 [ -f /etc/sysconfig/redis ] && . /etc/sysconfig/redis
 
@@ -32,8 +31,10 @@ lockfile=/var/lock/subsys/redis
 start() {
     [ -x $redis ] || exit 5
     [ -f $REDIS_CONF_FILE ] || exit 6
+	mkdir -p /var/run/redis
+	chown redis:redis /var/run/redis
     echo -n $"Starting $prog: "
-    daemon --user ${REDIS_USER} --pidfile=${PIDFILE} "$redis $REDIS_CONF_FILE"
+    daemon --user redis --pidfile=${PIDFILE} "$redis $REDIS_CONF_FILE"
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile
