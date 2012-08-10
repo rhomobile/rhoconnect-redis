@@ -12,6 +12,9 @@ rm -f /etc/logrotate.d/redis
 rm -f /etc/init/rhoconect-redis.conf
 rm -f /etc/init.d/redis
 
+rm -rf /var/log/redis
 # delete user/group
 rm -rf /var/lib/redis
-userdel redis > /dev/null
+userdel redis >& /dev/null
+
+#echo "'rhoconnect-redis' configuration files are removed"

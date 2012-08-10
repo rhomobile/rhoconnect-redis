@@ -51,5 +51,4 @@ all: prepare
 	-d "make >= 3.0" -d "kernel-devel >= 0"  -d "initscripts >= 0" \
 	-d "gcc >= 4.0" -d "gcc-c++ >= 4.0"  ./
 #	--category "Development Tools"  ./
-	./
 	rm -rf /tmp/installdir
