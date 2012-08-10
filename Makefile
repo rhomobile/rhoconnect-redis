@@ -27,7 +27,7 @@ rpm: prepare
 	--after-remove  /tmp/installdir/redis_rpm_uninstall \
 	--prefix /opt/rhoconnect/installer \
 	--description "RhoConnect Redis Server" \
-	-d "make >= 3.0" -d "kernel-devel >= 0" -d "initscripts >= 0" \
+	-d "make >= 3.0" -d "initscripts >= 0" \
 	-d "gcc >= 4.0" -d "gcc-c++ >= 4.0"  ./
 #	--category "Development Tools"  ./
 	rm -rf /tmp/installdir
@@ -48,7 +48,7 @@ all: prepare
 	--after-remove  /tmp/installdir/redis_rpm_uninstall \
 	--prefix /opt/rhoconnect/installer \
 	--description "RhoConnect Redis Server" \
-	-d "make >= 3.0" -d "kernel-devel >= 0"  -d "initscripts >= 0" \
+	-d "make >= 3.0" -d "initscripts >= 0" \
 	-d "gcc >= 4.0" -d "gcc-c++ >= 4.0"  ./
 #	--category "Development Tools"  ./
 	rm -rf /tmp/installdir
