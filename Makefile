@@ -1,5 +1,5 @@
 NAME=rhoconnect-redis
-VERSION=2.4.15
+VERSION=2.4.17
 DEB_FILES = redis_deb_install redis_deb_uninstall rhoconnect-redis.conf redis_deb_init_script logrotate.conf
 RPM_FILES = redis_rpm_install redis_rpm_uninstall redis_init_script logrotate.conf 
 
