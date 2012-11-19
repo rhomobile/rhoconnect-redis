@@ -1,5 +1,5 @@
 #!/bin/bash
-REDIS_VERSION=2.4.17
+REDIS_VERSION=2.6.4
 REDIS_URL=http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
 
 #PREFIX=/usr/local
