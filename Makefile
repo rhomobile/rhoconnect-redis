@@ -32,7 +32,7 @@ rpm: prepare
 #	--category "Development Tools"  ./
 	rm -rf /tmp/installdir
 
-# Build both rpm/deb packagees
+# Build both rpm/deb packages
 all: prepare
 	cp $(DEB_FILES) /tmp/installdir
 	fpm -s dir -t deb -n $(NAME) -v $(VERSION) -a all -C /tmp/installdir \
