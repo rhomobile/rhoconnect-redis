@@ -1,4 +1,5 @@
 #!/bin/bash
+# TODO: stop server if it's running ...
 
 if [ -e "/opt/rhoconnect/bin/" ]; then
 	cd /opt/rhoconnect/bin/
@@ -16,4 +17,5 @@ rm -rf /var/log/redis
 # delete user/group
 rm -rf /var/lib/redis
 deluser redis >& /dev/null
-#echo "'rhoconnect-redis' configuration files are removed"
+
+echo "'rhoconnect-redis' configuration files are removed"
