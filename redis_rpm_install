@@ -1,5 +1,5 @@
 #!/bin/bash
-REDIS_VERSION=2.6.7
+REDIS_VERSION=2.6.14
 REDIS_URL=http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
 
 #PREFIX=/usr/local
@@ -15,7 +15,7 @@ echo "Starting rhoconnect-redis installer ..." | tee -a $log_file
 
 cd /opt/rhoconnect/installer
 wget ${REDIS_URL} -O redis-${REDIS_VERSION}.tar.gz
-tar -xzf redis-${REDIS_VERSION}.tar.gz 
+tar -xzf redis-${REDIS_VERSION}.tar.gz
 cd redis-${REDIS_VERSION}/
 
 echo "Compiling redis ..." | tee -a $log_file

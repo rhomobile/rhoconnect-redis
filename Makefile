@@ -1,7 +1,7 @@
 NAME=rhoconnect-redis
-VERSION=2.6.7
+VERSION=2.6.14
 DEB_FILES = redis_deb_install redis_deb_uninstall rhoconnect-redis.conf redis_deb_init_script logrotate.conf
-RPM_FILES = redis_rpm_install redis_rpm_uninstall redis_init_script logrotate.conf 
+RPM_FILES = redis_rpm_install redis_rpm_uninstall redis_init_script logrotate.conf
 
 clean:
 	rm -f rhoconnect-redis*.deb
@@ -18,7 +18,7 @@ deb: prepare
 	--prefix /opt/rhoconnect/installer \
 	--description "RhoConnect Redis Server" \
 	-d "build-essential (>= 0)" ./
-	rm -rf /tmp/installdir	
+	rm -rf /tmp/installdir
 
 rpm: prepare
 	cp $(RPM_FILES) /tmp/installdir

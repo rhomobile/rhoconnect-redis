@@ -1,13 +1,17 @@
 #!/bin/sh
 #
-# redis - this script starts and stops the redis-server daemon
+### BEGIN INIT INFO
+# Provides:          redis-server
+# Required-Start:    $syslog
+# Required-Stop:     $syslog
+# Should-Start:      $local_fs
+# Should-Stop:       $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: redis-server - Persistent key-value db
+# Description:       redis-server - Persistent key-value db
+### END INIT INFO
 #
-# description:  Redis is a persistent key-value database
-# processname: redis-server
-# config:      /etc/redis/redis.conf
-# config:      /etc/sysconfig/redis
-# pidfile:     /var/run/redis.pid
-
 # Source function library.
 . /etc/rc.d/init.d/functions
 
