@@ -8,6 +8,7 @@ if [ -e "/opt/rhoconnect/bin/" ]; then
 fi
 
 rm -f /opt/rhoconnect/etc/redis.conf
+rm -rf /opt/rhoconnect/logs/rhoconnect_redis_*
 
 rm -f /etc/logrotate.d/redis
 rm -f /etc/init/rhoconect-redis.conf
