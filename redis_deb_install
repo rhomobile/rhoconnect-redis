@@ -1,6 +1,6 @@
 #!/bin/bash
 REDIS_VERSION=2.6.16
-REDIS_URL=http://redis.googlecode.com/files/redis-${REDIS_VERSION}.tar.gz
+REDIS_URL=http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz
 
 #PREFIX=/usr/local
 PREFIX=/opt/rhoconnect
